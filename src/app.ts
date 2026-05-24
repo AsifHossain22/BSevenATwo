@@ -4,6 +4,7 @@ import express, {
   type Response,
 } from 'express';
 import { issuesRoutes } from './modules/issues/issues.routes';
+import { authRoutes } from './modules/auth/auth.routes';
 
 // ExpressApp
 const app: Application = express();
@@ -19,6 +20,9 @@ app.get('/', async (req: Request, res: Response) => {
     message: 'Hello Next Level Server!',
   });
 });
+
+// AuthRoutes
+app.use('/api/auth', authRoutes);
 
 // IssuesRoutes
 app.use('/api/issues', issuesRoutes);
