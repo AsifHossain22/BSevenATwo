@@ -78,6 +78,7 @@ const loginUserIntoDB = async (payload: any) => {
     },
   );
 
+  // AccessTOKEN
   const accessToken = jwt.sign(jwtTokenPayload, config.secret as string, {
     expiresIn: '1d',
   });

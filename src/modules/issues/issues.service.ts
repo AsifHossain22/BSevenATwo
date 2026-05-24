@@ -113,82 +113,8 @@ const getSingleIssueFromDB = async (id: string) => {
   };
 };
 
-// UpdateIssue
-const updateIssueIntoDB = async (
-  id: string,
-  payload: any,
-  authenticatedUser: any,
-) => {
-  const { title, description, type, status } = payload;
-
-  const currentIssueData = await pool.query(
-    `
-    SELECT * FROM issues WHERE id = $1
-    `,
-    [id],
-  );
-
-  if (currentIssueData.rows.length === 0) {
-    throw new Error('Issue not found!');
-  }
-
-  const currentIssue = currentIssueData.rows[0];
-
-  // AuthenticatedUser
-  if (authenticatedUser.role !== 'maintainer') {
-    if (currentIssue.reporter_id !== authenticatedUser.id) {
-      throw new Error(
-        'Forbidden! You have no permission to update this issue!',
-      );
-    }
-
-    if (currentIssue.status !== 'open') {
-      throw new Error(
-        'Forbidden! Contributors can only edit issues when their status is open.',
-      );
-    }
-  }
-
-  const updatedTitle = title || currentIssue.title;
-  const updatedDescription = description || currentIssue.description;
-  const updatedType = type || currentIssue.type;
-  const updatedStatus = status || currentIssue.status;
-
-  const result = await pool.query(
-    `
-    UPDATE issues SET
-    title = $1,
-    description = $2,
-    type = $3,
-    status = $4,
-    updated_at = NOW()
-    WHERE id = $5 RETURNING *
-    `,
-    [updatedTitle, updatedDescription, updatedType, updatedStatus, id],
-  );
-
-  return result.rows[0];
-};
-
-// DeleteIssue
-const deleteIssueFromDB = async (id: string) => {
-  const deleteResult = await pool.query(
-    `
-    DELETE FROM issues WHERE id = $1
-    `,
-    [id],
-  );
-
-  if (deleteResult.rowCount === 0) {
-    throw new Error('Issue not found!');
-  }
-  return true;
-};
-
 export const issuesService = {
   createIssueIntoDB,
   getAllIssuesFromDB,
   getSingleIssueFromDB,
-  updateIssueIntoDB,
-  deleteIssueFromDB,
 };

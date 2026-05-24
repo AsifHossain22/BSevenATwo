@@ -17,14 +17,4 @@ router.get('/', issuesController.getAllIssues);
 // GetSingleIssue - GET
 router.get('/:id', issuesController.getSingleIssue);
 
-// UpdateIssue - PATCH
-router.patch(
-  '/:id',
-  auth('maintainer', 'contributor'),
-  issuesController.updateIssue,
-);
-
-// DeleteIssue - DELETE
-router.delete('/:id', auth('maintainer'), issuesController.deleteIssue);
-
 export const issuesRoutes = router;
