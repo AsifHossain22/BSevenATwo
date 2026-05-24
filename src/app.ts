@@ -3,6 +3,7 @@ import express, {
   type Request,
   type Response,
 } from 'express';
+import { issuesRoutes } from './modules/issues/issues.routes';
 
 // ExpressApp
 const app: Application = express();
@@ -18,5 +19,8 @@ app.get('/', async (req: Request, res: Response) => {
     message: 'Hello Next Level Server!',
   });
 });
+
+// IssuesRoutes
+app.use('/api/issues', issuesRoutes);
 
 export default app;
