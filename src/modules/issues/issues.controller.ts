@@ -66,8 +66,37 @@ const getSingleIssue = async (req: Request, res: Response) => {
   }
 };
 
+// UpdateIssue
+const updateIssue = async (req: Request, res: Response) => {
+  try {
+    const result = await issuesService.updateIssueIntoDB(
+      req.params.id as string,
+      req.body,
+      req.user,
+    );
+
+    sendResponse(res, {
+      statusCode: 200,
+      success: true,
+      message: 'Issue updated successfully!',
+      data: result,
+    });
+  } catch (error: any) {
+    let statusCode = 400;
+    const errorMessage = error.message.toLowerCase();
+    if (errorMessage.includes('not found')) statusCode = 404;
+    if (errorMessage.includes('forbidden')) statusCode = 403;
+    sendResponse(res, {
+      statusCode: statusCode,
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 export const issuesController = {
   createIssue,
   getAllIssues,
   getSingleIssue,
+  updateIssue,
 };
