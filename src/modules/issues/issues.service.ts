@@ -160,7 +160,7 @@ const updateIssueIntoDB = async (
 
     if (currentIssue.status !== 'open') {
       throw new Error(
-        'Forbidden! Contributors can only edit issues when their status is open.',
+        'Conflict! Contributors can only edit issues when their status is open.',
       );
     }
 

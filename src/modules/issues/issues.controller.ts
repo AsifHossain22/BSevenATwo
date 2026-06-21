@@ -84,8 +84,8 @@ const updateIssue = async (req: Request, res: Response) => {
   } catch (error: any) {
     let statusCode = 400;
     const errorMessage = error.message.toLowerCase();
-    if (errorMessage.includes('not found')) statusCode = 404;
-    if (errorMessage.includes('forbidden')) statusCode = 409;
+    if (errorMessage.includes('conflict')) statusCode = 409;
+    if (errorMessage.includes('forbidden')) statusCode = 403;
     sendResponse(res, {
       statusCode: statusCode,
       success: false,
