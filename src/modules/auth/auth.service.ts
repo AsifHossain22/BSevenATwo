@@ -7,6 +7,22 @@ import config from '../../config/env';
 const registerUserIntoDB = async (payload: any) => {
   const { name, email, password, role } = payload;
 
+  if (!name) {
+    throw new Error('Name is required!');
+  }
+
+  if (!email) {
+    throw new Error('Email is required!');
+  }
+
+  if (!password) {
+    throw new Error('Password is required!');
+  }
+
+  if (role && role !== 'contributor' && role !== 'maintainer') {
+    throw new Error('Role must be contributor or maintainer!');
+  }
+
   const userExists = await pool.query(
     `
     SELECT * FROM users WHERE email = $1
@@ -66,7 +82,6 @@ const loginUserIntoDB = async (payload: any) => {
     id: user.id,
     name: user.name,
     role: user.role,
-    email: user.email,
   };
 
   // RefreshTOKEN
@@ -84,8 +99,7 @@ const loginUserIntoDB = async (payload: any) => {
   });
 
   return {
-    accessToken,
-    refreshToken,
+    token: accessToken,
     user: {
       id: user.id,
       name: user.name,

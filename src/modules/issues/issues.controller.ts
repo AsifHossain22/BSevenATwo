@@ -85,7 +85,7 @@ const updateIssue = async (req: Request, res: Response) => {
     let statusCode = 400;
     const errorMessage = error.message.toLowerCase();
     if (errorMessage.includes('not found')) statusCode = 404;
-    if (errorMessage.includes('forbidden')) statusCode = 403;
+    if (errorMessage.includes('forbidden')) statusCode = 409;
     sendResponse(res, {
       statusCode: statusCode,
       success: false,
@@ -99,7 +99,7 @@ const deleteIssue = async (req: Request, res: Response) => {
   try {
     await issuesService.deleteIssueFromDB(req.params.id as string);
     sendResponse(res, {
-      statusCode: 204,
+      statusCode: 200,
       success: true,
       message: 'Issue deleted successfully!',
     });

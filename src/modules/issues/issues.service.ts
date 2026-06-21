@@ -121,6 +121,22 @@ const updateIssueIntoDB = async (
 ) => {
   const { title, description, type, status } = payload;
 
+  if (title && title.length > 150) {
+    throw new Error('Title cannot exceed 150 characters!');
+  }
+
+  if (description && description.length < 20) {
+    throw new Error('Description must contain at least 20 characters!');
+  }
+
+  if (type && type !== 'bug' && type !== 'feature_request') {
+    throw new Error("Type must be 'bug' or 'feature_request'!");
+  }
+
+  if (status && !['open', 'in_progress', 'resolved'].includes(status)) {
+    throw new Error('Status must be open, in_progress or resolved!');
+  }
+
   const currentIssueData = await pool.query(
     `
     SELECT * FROM issues WHERE id = $1
@@ -146,6 +162,10 @@ const updateIssueIntoDB = async (
       throw new Error(
         'Forbidden! Contributors can only edit issues when their status is open.',
       );
+    }
+
+    if (authenticatedUser.role === 'contributor' && status) {
+      throw new Error('Contributors cannot change issue status!');
     }
   }
 
