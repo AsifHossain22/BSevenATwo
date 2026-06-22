@@ -4,7 +4,7 @@ A collaborative backend platform for software engineering teams to report bugs, 
 
 ## Demo Link
 
-* **Live API URL:**  *https://dev-pulse-hiasif.vercel.app/*
+* **Live API URL:**  *https://dev-pulse-pi-two.vercel.app/*
 
 ---
 
